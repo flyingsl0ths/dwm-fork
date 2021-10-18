@@ -213,7 +213,7 @@ static const char *const autostart[] = {
 	"nm-applet", "&",                                                                                 NULL,
     "lxpolkit", "&",                                                                                  NULL, 
     "/bin/bash", "-c", "(nohup picom &)",                                                             NULL,
-    "/home/flyingsl0ths/.dwm/dwm_status.sh", "&",                                                     NULL,
+    "/bin/bash", "/home/flyingsl0ths/.dwm/status_bar.sh", "&",                                        NULL,
     "xwallpaper", "--output", "eDP", "--stretch", "/home/flyingsl0ths/Pictures/wallpaper/matrix.png", NULL,
 	NULL /* terminate */
 };

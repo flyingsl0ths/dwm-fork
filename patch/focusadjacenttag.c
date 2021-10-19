@@ -51,7 +51,8 @@ viewtoright(const Arg *arg)
 void
 tagandviewtoleft(const Arg *arg)
 {
-	if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
+	if (selmon->sel != NULL
+    && __builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
 	&& selmon->tagset[selmon->seltags] > 1) {
 		selmon->sel->tags >>= 1;
 		selmon->seltags ^= 1; /* toggle sel tagset */
@@ -65,7 +66,8 @@ tagandviewtoleft(const Arg *arg)
 void
 tagandviewtoright(const Arg *arg)
 {
-	if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
+	if (selmon->sel != NULL
+    && __builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
 	&& selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
 		selmon->sel->tags <<= 1;
 		selmon->seltags ^= 1; /* toggle sel tagset */

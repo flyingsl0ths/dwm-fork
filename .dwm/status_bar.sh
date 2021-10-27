@@ -1,16 +1,28 @@
 #!/bin/sh
 
-status_bar() {
-    ram_usage="[R: $(free -h --si | grep Mem | awk '{print ($3)}')]"
+kill_existing() {
+    instance_pid="$(pgrep -fo "/bin/sh /home/flyingsl0ths/.dwm/status_bar.sh")"
 
-    todays_date="[D: $(date +"%b %d, %Y %a %I:%M%p")]"
-
-    battery_level="[B: $(cat /sys/class/power_supply/BAT1/capacity)%]"
-
-    volume_level="[V: $(pamixer --get-volume)]"
-
-    xsetroot -name "$ram_usage | $todays_date | $battery_level | $volume_level"
+    if [ "$instance_pid" != "$$" ]; then
+        kill -KILL "$instance_pid"
+    fi
 }
+
+status_bar() {
+    wifi_connection="[  $(nmcli -t -f name connection show --active | awk '{print $1}')]"
+
+    #ram_usage="[R: $(free -h --si | grep Mem | awk '{print ($3)}')]"
+
+    todays_date="[  $(date +"%b %d, %Y %a %I:%M%p")]"
+
+    battery_level="[  $(cat /sys/class/power_supply/BAT1/capacity)%]"
+
+    volume_level="[  $(pamixer --get-volume-human)]"
+
+    xsetroot -name "$wifi_connection | $todays_date | $battery_level | $volume_level"
+}
+
+kill_existing
 
 while true; do
     status_bar

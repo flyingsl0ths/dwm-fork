@@ -4,7 +4,7 @@
 
 #include "bar_ewmhtags.h"
 #include "bar_ltsymbol.h"
-#include "bar_status2d.h"
+#include "bar_status.h"
 #include "bar_tags.h"
 #include "bar_wintitle.h"
 #include "bar_systray.h"
@@ -13,17 +13,14 @@
 #include "aspectresize.h"
 #include "attachx.h"
 #include "cool_autostart.h"
-#include "decorationhints.h"
-#include "distributetags.h"
 #include "focusdir.h"
 #include "focusadjacenttag.h"
-#include "focusmaster.h"
 #include "moveresize.h"
 #include "movestack.h"
+#include "scratchpad.h"
 #include "selfrestart.h"
 #include "tagall.h"
 #include "vanitygaps.h"
-
 /* Layouts */
 #include "layout_bstack.h"
 #include "layout_centeredmaster.h"

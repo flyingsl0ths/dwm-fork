@@ -1,8 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx       = 3;   /* border pixel of windows */
-static const int corner_radius           = 0;
+static const unsigned int borderpx       = 0;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
 static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
@@ -12,15 +11,22 @@ static const int smartgaps_fact          = 0;   /* gap factor when there is only
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
 static const int focusonwheel            = 0;
+
 /* Status is to be shown on: -1 (all monitors), 0 (a specific monitor by index), 'A' (active monitor) */
-static const int statusmon               = -1;
-static const unsigned int systrayspacing = 0;   /* systray spacing */
+static const int statusmon               = 'A';
+static const unsigned int systrayspacing = 1;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
+
 /* Indicators: see patch/bar_indicators.h for options */
-static int tagindicatortype              = INDICATOR_BOTTOM_BAR_SLIM;
+static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
-static const char *fonts[]               = {"JetBrainsMonoMedium Nerd Font:size=13:antialias=true" };
+
+static const char *fonts[]               = {
+    "JetBrainsMonoMedium Nerd Font:size=13:antialias=true",
+    "Font Awesome 5 Free:style=Solid:size=13"
+};
+
 static const char dmenufont[]            = "JetBrainsMonoMedium Nerd Font:size=13:antialias=true";
 
 static char c000000[]                    = "#000000"; // placeholder value
@@ -78,6 +84,32 @@ static char *colors[][ColCount] = {
 	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
 };
 
+
+
+static const char *const autostart[] = {
+	"xinput", "set-prop", "12", "316", "1",                                                                 NULL,
+	"dunst", "&",                                                                                           NULL,
+	"gammy", "&",                                                                                           NULL,
+    "lxpolkit", "&",                                                                                        NULL, 
+    "/bin/sh", "-c", "(nohup picom &)",                                                                     NULL,
+    "/home/flyingsl0ths/.dwm/status_bar.sh", "&",                                                           NULL,
+    "xwallpaper", "--output", "eDP", "--stretch", "/home/flyingsl0ths/.local/share/wallhaven/tonkatsu.png", NULL,
+	NULL /* terminate */
+};
+
+const char *spcmd1[] = {"alacritty", "--class='terminalscratchpad'", NULL};
+const char *spcmd2[] = {"alacritty", "--class='fmscratchpad'", "-e", "zsh", "-i", "-c", "ranger", NULL};
+const char *spcmd3[] = {"alacritty", "--class='ytmusicscratchpad'", "-e", "ytfzf", "-m", "-t", "-l", NULL};
+const char *spcmd4[] = {"alacritty", "--class='pyscratchpad'", "-e", "/home/flyingsl0ths/.local/bin/bpython", NULL};
+
+static Sp scratchpads[] = {
+   /* name          cmd  */
+   {"terminalscratchpad",         spcmd1},
+   {"fmscratchpad",               spcmd2},
+   {"ytmusicscratchpad",          spcmd3},
+   {"pyscratchpad",               spcmd4}
+};
+
 /* Tags
  * In a traditional dwm the number of tags in use can be changed simply by changing the number
  * of strings in the tags array. This build does things a bit different which has some added
@@ -106,7 +138,7 @@ static char *colors[][ColCount] = {
  * them. This works seamlessly with alternative tags and alttagsdecoration patches.
  */
 static char *tagicons[][NUMTAGS] = {
-	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+	[DEFAULT_TAGS]        = { "", "", "", "", "", "", "", "", "" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
@@ -141,8 +173,13 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "Firefox", .tags = 1 << 7)
+	RULE(.class = "Gimp", .isfloating = 1)
+	RULE(.class = "jetbrains-studio", .isfloating = 1)
+	RULE(.class = "gammy", .isfloating = 1)
+	RULE(.instance = "terminalscratchpad", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.instance = "fmscratchpad", .tags = SPTAG(1), .isfloating = 1)
+	RULE(.instance = "ytmusicscratchpad", .tags = SPTAG(2), .isfloating = 1)
+	RULE(.instance = "pyscratchpad", .tags = SPTAG(3), .isfloating = 1)
 };
 
 
@@ -164,7 +201,7 @@ static const BarRule barrules[] = {
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	{  0,        0,     BAR_ALIGN_RIGHT,  width_systray,           draw_systray,           click_systray,           "systray" },
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_status2d,          "status2d" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_status,            "status" },
 	{ -1,        0,     BAR_ALIGN_NONE,   width_wintitle,          draw_wintitle,          click_wintitle,          "wintitle" },
 };
 
@@ -172,9 +209,6 @@ static const BarRule barrules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-static const int decorhints  = 1;    /* 1 means respect decoration hints */
-
-
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -185,9 +219,7 @@ static const Layout layouts[] = {
 	{ "|M|",      centeredmaster },
 	{ "(@)",      spiral },
 	{ "HHH",      grid },
-	{ NULL,       NULL },
 };
-
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -198,32 +230,19 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 
-
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/bash", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* helper for spawning no argument commands in the pre dwm-5.0 fashion */
 #define SCMD(cmd) { .v = (const char*[]){ cmd, NULL } }
-
-/* startup commands */
-static const char *const autostart[] = {
-	"xinput", "set-prop", "12", "316", "1",                                                           NULL,
-	"gammy", "&",                                                                                     NULL,
-	"dunst", "&",                                                                                     NULL,
-	"nm-applet", "&",                                                                                 NULL,
-    "lxpolkit", "&",                                                                                  NULL, 
-    "/bin/bash", "-c", "(nohup picom &)",                                                             NULL,
-    "/home/flyingsl0ths/.dwm/status_bar.sh", "&",                                                     NULL,
-    "xwallpaper", "--output", "eDP", "--stretch", "/home/flyingsl0ths/Pictures/wallpaper/matrix.png", NULL,
-	NULL /* terminate */
-};
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = {
 	"dmenu_run",
-	"-m",  dmenumon,
-    "-p",  "λ",
+    "-i",
+    "-p", "λ",
+	"-m", dmenumon,
 	"-fn", dmenufont,
 	"-nb", normbgcolor,
 	"-nf", normfgcolor,
@@ -234,8 +253,6 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "alacritty", NULL };
 
-
-
 static Key keys[] = {
 	/* modifier                     key            function                argument */
 	{ MODKEY,                       XK_r,            spawn,                  {.v = dmenucmd } },
@@ -245,11 +262,14 @@ static Key keys[] = {
 	{ MODKEY,                       XK_z,            spawn,                  SCMD("zathura") },
 	{ MODKEY,                       XK_u,            spawn,                  SCMD("corectrl") },
 	{ MODKEY,                       XK_v,            spawn,                  SCMD("vscodium") },
-	{ MODKEY,                       XK_g,            spawn,                  SCMD("gimp") },
 	{ MODKEY,                       XK_e,            spawn,                  SCMD("/home/flyingsl0ths/.local/bin/editors") },
 	{ MODKEY,                       XK_a,            spawn,                  {.v = (const char*[])
                                                                                  {"/home/flyingsl0ths/.local/bin/game_mode", 
                                                                                   "android-studio", NULL} } },
+	{ MODKEY,                       XK_y,            spawn,                  {.v = (const char*[])
+                                                                                 {"/home/flyingsl0ths/.local/bin/game_mode", 
+                                                                                  "yuzu", NULL} } },
+	{ MODKEY|ShiftMask,             XK_g,            spawn,                  SCMD("gimp") },
 	{ MODKEY|ShiftMask,             XK_e,            spawn,                  SCMD("~/.local/bin/editors") },
 	{ MODKEY|ShiftMask,             XK_t,            spawn,                  SCMD("xfce4-taskmanager") },
 	{ MODKEY|ShiftMask,             XK_w,            spawn,                  {.v = (const char*[])
@@ -294,8 +314,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_0,            tag,                    {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_comma,        tagmon,                 {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,       tagmon,                 {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_bracketleft,  viewtoleft,             {0} }, // note keybinding conflict with focusdir
-	{ MODKEY|ShiftMask,             XK_bracketright, viewtoright,            {0} }, // note keybinding conflict with focusdir
+	{ MODKEY|ShiftMask,             XK_Left,         viewtoleft,             {0} },
+	{ MODKEY|ShiftMask,             XK_Right,        viewtoright,            {0} },
 	{ MODKEY|ShiftMask,             XK_braceleft,    tagtoleft,              {0} },
 	{ MODKEY|ShiftMask,             XK_braceright,   tagtoright,             {0} },
 	{ MODKEY|ShiftMask,             XK_F1,           tagall,                 {.v = "1"} },
@@ -310,10 +330,14 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_k,            movestack,              {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_j,            movestack,              {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_z,            zoom,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Return,       togglescratch,          {.ui = 0 } },
+	{ MODKEY|ShiftMask,             XK_f,            togglescratch,          {.ui = 1 } },
+	{ MODKEY|ShiftMask,             XK_y,            togglescratch,          {.ui = 2 } },
+	{ MODKEY|ShiftMask,             XK_p,            togglescratch,          {.ui = 3 } },
+	{ MODKEY|ShiftMask,             XK_grave,        removescratch,          {.ui = 0 } },
+	{ MODKEY|ControlMask,           XK_grave,        setscratch,             {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_bracketleft,  tagandviewtoleft,       {0} },
 	{ MODKEY|ControlMask,           XK_bracketright, tagandviewtoright,      {0} },
-	{ MODKEY|ControlMask,           XK_space,        focusmaster,            {0} },
-	{ MODKEY|ControlMask,           XK_d,            distributetags,         {0} },
 	{ MODKEY|ControlMask,           XK_e,            aspectresize,           {.i = +24} },
 	{ MODKEY|ControlMask,           XK_r,            aspectresize,           {.i = -24} },
 	{ MODKEY|ControlMask,           XK_s,            moveresize,             {.v = "0x 25y 0w 0h" } },
@@ -351,7 +375,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                                  8)
 };
 
-
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
@@ -368,6 +391,4 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,              Button3,        toggletag,      {0} },
 };
-
-
 

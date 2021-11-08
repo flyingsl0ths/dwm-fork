@@ -9,17 +9,17 @@ kill_existing() {
 }
 
 status_bar() {
-    wifi_connection="[  $(nmcli -t -f name connection show --active | awk '{print $1}')]"
+    wifi_connection="[^c#50FA7B^  ^c#F8F8F2^$(nmcli -t -f name connection show --active | awk '{print $1}')]"
 
-    #ram_usage="[R: $(free -h --si | grep Mem | awk '{print ($3)}')]"
+    ram_usage="[^c#F1FA8C^  ^c#F8F8F2^$(free -h --si | grep Mem | awk '{print ($3)}')]"
 
-    todays_date="[  $(date +"%b %d, %Y %a %I:%M%p")]"
+    todays_date="[^c#FFB86C^  ^c#F8F8F2^$(date +"%b %d, %Y %a %I:%M%p")]"
 
-    battery_level="[  $(cat /sys/class/power_supply/BAT1/capacity)%]"
+    battery_level="[^c#8BE9FD^  ^c#F8F8F2^$(cat /sys/class/power_supply/BAT1/capacity)%]"
 
-    volume_level="[  $(pamixer --get-volume-human)]"
+    volume_level="[^c#BD93F9^  ^c#F8F8F2^$(pamixer --get-volume-human)]"
 
-    xsetroot -name "$wifi_connection | $todays_date | $battery_level | $volume_level"
+    xsetroot -name "$wifi_connection $ram_usage $todays_date $battery_level $volume_level"
 }
 
 kill_existing

@@ -87,13 +87,13 @@ static char *colors[][ColCount] = {
 
 
 static const char *const autostart[] = {
+    "/usr/lib/xfce4/notifyd/xfce4-notifyd", "&",                                                                NULL, 
 	"xinput", "set-prop", "12", "316", "1",                                                                 NULL,
-	"dunst", "&",                                                                                           NULL,
 	"gammy", "&",                                                                                           NULL,
-    "lxpolkit", "&",                                                                                        NULL, 
+    "/usr/lib/xfce-polkit/xfce-polkit", "&",                                                                NULL, 
     "/bin/sh", "-c", "(nohup picom &)",                                                                     NULL,
     "/home/flyingsl0ths/.dwm/status_bar.sh", "&",                                                           NULL,
-    "xwallpaper", "--output", "eDP", "--stretch", "/home/flyingsl0ths/.local/share/wallhaven/tonkatsu.png", NULL,
+    "xwallpaper", "--output", "eDP", "--stretch", "/home/flyingsl0ths/.local/share/wallhaven/arch linux cc.png", NULL,
 	NULL /* terminate */
 };
 
@@ -138,7 +138,7 @@ static Sp scratchpads[] = {
  * them. This works seamlessly with alternative tags and alttagsdecoration patches.
  */
 static char *tagicons[][NUMTAGS] = {
-	[DEFAULT_TAGS]        = { "", "", "", "", "", "", "", "", "" },
+	[DEFAULT_TAGS]        = { "", "", "", "", "", "", "", "", " " },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
@@ -169,17 +169,17 @@ static const Rule rules[] = {
 	 *	WM_WINDOW_ROLE(STRING) = role
 	 *	_NET_WM_WINDOW_TYPE(ATOM) = wintype
 	 */
-	RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
+	RULE(.wintype = WTYPE "DIALOG", .isfloating = 1, .iscentered = 1)
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
-	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
+	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1, .iscentered = 1)
 	RULE(.class = "Gimp", .isfloating = 1)
 	RULE(.class = "jetbrains-studio", .isfloating = 1)
-	RULE(.class = "gammy", .isfloating = 1)
-	RULE(.instance = "terminalscratchpad", .tags = SPTAG(0), .isfloating = 1)
-	RULE(.instance = "fmscratchpad", .tags = SPTAG(1), .isfloating = 1)
-	RULE(.instance = "ytmusicscratchpad", .tags = SPTAG(2), .isfloating = 1)
-	RULE(.instance = "pyscratchpad", .tags = SPTAG(3), .isfloating = 1)
+	RULE(.class = "gammy", .isfloating = 1, .iscentered = 1)
+	RULE(.instance = "terminalscratchpad", .tags = SPTAG(0), .isfloating = 1, .iscentered = 1)
+	RULE(.instance = "fmscratchpad", .tags = SPTAG(1), .isfloating = 1, .iscentered = 1)
+	RULE(.instance = "ytmusicscratchpad", .tags = SPTAG(2), .isfloating = 1, .iscentered =1)
+	RULE(.instance = "pyscratchpad", .tags = SPTAG(3), .isfloating = 1, .iscentered = 1)
 };
 
 
@@ -201,7 +201,7 @@ static const BarRule barrules[] = {
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	{  0,        0,     BAR_ALIGN_RIGHT,  width_systray,           draw_systray,           click_systray,           "systray" },
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_status,            "status" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_status2d,          "status" },
 	{ -1,        0,     BAR_ALIGN_NONE,   width_wintitle,          draw_wintitle,          click_wintitle,          "wintitle" },
 };
 
@@ -209,6 +209,7 @@ static const BarRule barrules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int decorhints  = 1;    /* 1 means respect decoration hints */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -257,8 +258,7 @@ static Key keys[] = {
 	/* modifier                     key            function                argument */
 	{ MODKEY,                       XK_r,            spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } },
-	{ MODKEY,                       XK_w,            spawn,                  SCMD("firedragon") },
-	{ MODKEY,                       XK_p,            spawn,                  SCMD("pcmanfm") },
+	{ MODKEY,                       XK_w,            spawn,                  SCMD("librewolf") },
 	{ MODKEY,                       XK_z,            spawn,                  SCMD("zathura") },
 	{ MODKEY,                       XK_u,            spawn,                  SCMD("corectrl") },
 	{ MODKEY,                       XK_v,            spawn,                  SCMD("vscodium") },
@@ -269,13 +269,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_y,            spawn,                  {.v = (const char*[])
                                                                                  {"/home/flyingsl0ths/.local/bin/game_mode", 
                                                                                   "yuzu", NULL} } },
-	{ MODKEY|ShiftMask,             XK_g,            spawn,                  SCMD("gimp") },
-	{ MODKEY|ShiftMask,             XK_e,            spawn,                  SCMD("~/.local/bin/editors") },
-	{ MODKEY|ShiftMask,             XK_t,            spawn,                  SCMD("xfce4-taskmanager") },
-	{ MODKEY|ShiftMask,             XK_w,            spawn,                  {.v = (const char*[])
-                                                                                 {"firedragon", "--private-window", NULL} } },
-	{ MODKEY|ShiftMask,             XK_l,            spawn,                  {.v = (const char*[])
-                                                                                 {"xdg-screensaver", "lock", NULL} } } ,
 	{ MODKEY,                       XK_F6,           spawn,                  {.v = (const char*[])
                                                                                  {"pamixer", "-t", NULL}} },
 	{ MODKEY,                       XK_F7,           spawn,                  {.v = (const char*[])
@@ -286,6 +279,16 @@ static Key keys[] = {
                                                                                  {"brightnessctl", "-q", "set", "5%-", NULL} } },
 	{ MODKEY,                       XK_F3,           spawn,                  {.v = (const char*[])
                                                                                  {"brightnessctl", "-q", "set", "5%+", NULL} } },
+	{ MODKEY|ShiftMask,             XK_a,            spawn,                  SCMD(
+            "/home/flyingsl0ths/.config/rofi/launchers/ribbon.sh") },
+	{ MODKEY|ShiftMask,             XK_m,            spawn,                  SCMD("pcmanfm") },
+	{ MODKEY|ShiftMask,             XK_g,            spawn,                  SCMD("gimp") },
+	{ MODKEY|ShiftMask,             XK_e,            spawn,                  SCMD("~/.local/bin/editors") },
+	{ MODKEY|ShiftMask,             XK_t,            spawn,                  SCMD("xfce4-taskmanager") },
+	{ MODKEY|ShiftMask,             XK_w,            spawn,                  {.v = (const char*[])
+                                                                                 {"librewolf", "--private-window", NULL} } },
+	{ MODKEY|ShiftMask,             XK_l,            spawn,                  {.v = (const char*[])
+                                                                                 {"xdg-screensaver", "lock", NULL} } } ,
 	{ MODKEY,                       XK_j,            focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_k,            focusstack,             {.i = -1 } },
 	{ MODKEY,                       XK_bracketleft,  focusdir,               {.i = 0 } }, // left
@@ -314,8 +317,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_0,            tag,                    {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_comma,        tagmon,                 {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,       tagmon,                 {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Left,         viewtoleft,             {0} },
-	{ MODKEY|ShiftMask,             XK_Right,        viewtoright,            {0} },
+	{ MODKEY|ShiftMask,             XK_h,            viewtoleft,             {0} },
+	{ MODKEY|ShiftMask,             XK_l,            viewtoright,            {0} },
 	{ MODKEY|ShiftMask,             XK_braceleft,    tagtoleft,              {0} },
 	{ MODKEY|ShiftMask,             XK_braceright,   tagtoright,             {0} },
 	{ MODKEY|ShiftMask,             XK_F1,           tagall,                 {.v = "1"} },

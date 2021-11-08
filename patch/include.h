@@ -4,15 +4,16 @@
 
 #include "bar_ewmhtags.h"
 #include "bar_ltsymbol.h"
-#include "bar_status.h"
+//#include "bar_status.h"
+#include "bar_status2d.h"
 #include "bar_tags.h"
 #include "bar_wintitle.h"
 #include "bar_systray.h"
 
 /* Other patches */
 #include "aspectresize.h"
-#include "attachx.h"
 #include "cool_autostart.h"
+#include "decorationhints.h"
 #include "focusdir.h"
 #include "focusadjacenttag.h"
 #include "moveresize.h"

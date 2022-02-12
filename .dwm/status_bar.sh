@@ -9,15 +9,15 @@ kill_existing() {
 }
 
 status_bar() {
-    wifi_connection="[^c#50FA7B^  ^c#F8F8F2^$(nmcli -t -f name connection show --active | awk '{print $1}')]"
+    wifi_connection="[^c#ABE9B3^  ^c#D9E0EE^$(nmcli -t -f name connection show --active | awk '{print $1}')]"
 
-    ram_usage="[^c#F1FA8C^  ^c#F8F8F2^$(free -h --si | grep Mem | awk '{print ($3)}')]"
+    ram_usage="[^c#F8BD96^ ^c#D9E0EE^$(free -h --si | grep Mem | awk '{print ($3)}')]"
 
-    todays_date="[^c#FFB86C^  ^c#F8F8F2^$(date +"%b %d, %Y %a %I:%M%p")]"
+    todays_date="[^c#E8A2AF^  ^c#D9E0EE^$(date +"%b %d, %Y %a %I:%M%p")]"
 
-    battery_level="[^c#8BE9FD^  ^c#F8F8F2^$(cat /sys/class/power_supply/BAT1/capacity)%]"
+    battery_level="[^c#B5E8E0^  ^c#D9E0EE^$(cat /sys/class/power_supply/BAT1/capacity)%]"
 
-    volume_level="[^c#BD93F9^  ^c#F8F8F2^$(pamixer --get-volume-human)]"
+    volume_level="[^c#C9CBFF^ ^c#D9E0EE^$(pamixer --get-volume-human)]"
 
     xsetroot -name "$wifi_connection $ram_usage $todays_date $battery_level $volume_level"
 }
@@ -26,5 +26,5 @@ kill_existing
 
 while true; do
     status_bar
-    sleep 1
+    sleep 0.5s
 done

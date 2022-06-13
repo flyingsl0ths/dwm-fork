@@ -4,7 +4,7 @@
 
 #include "bar_ewmhtags.c"
 #include "bar_ltsymbol.c"
-//#include "bar_status.c"
+#include "bar_status.c"
 #include "bar_status2d.c"
 #include "bar_tags.c"
 #include "bar_wintitle.c"
@@ -18,6 +18,7 @@
 #include "focusdir.c"
 #include "moveresize.c"
 #include "movestack.c"
+#include "roundedcorners.c"
 #include "scratchpad.c"
 #include "selfrestart.c"
 #include "tagall.c"

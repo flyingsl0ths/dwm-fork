@@ -1,5 +1,5 @@
 # dwm version
-VERSION = 6.2
+VERSION = 6.3
 
 # Customize below to fit your system
 
@@ -28,7 +28,7 @@ FREETYPEINC = /usr/include/freetype2
 # OpenBSD - Uncomment this for the swallow patch / SWALLOW_PATCH
 #KVMLIB = -lkvm
 
-# Uncomment this for the alpha patch / BAR_ALPHA_PATCH
+# Uncomment this for the alpha patch and the winicon patch (BAR_ALPHA_PATCH, BAR_WINICON_PATCH)
 #XRENDER = -lXrender
 
 # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
@@ -43,7 +43,7 @@ FREETYPEINC = /usr/include/freetype2
 #YAJLINC = -I/usr/include/yajl
 
 # Uncomment this for the rounded corners patch / ROUNDED_CORNERS_PATCH
-#XEXTLIB = -lXext
+XEXTLIB = -lXext
 
 # Uncomment this for the swallow patch / SWALLOW_PATCH
 #XCBLIBS = -lX11-xcb -lxcb -lxcb-res
@@ -58,7 +58,7 @@ LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}  ${XRENDER} ${MPDCLIENT
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
 #CFLAGS   = -g -std=c99 -pedantic -Wall -O0 ${INCS} ${CPPFLAGS}
-CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -O3 ${INCS} ${CPPFLAGS}
+CFLAGS   = -std=c99 -pedantic -Wall -Wno-unused-function -Wno-deprecated-declarations -Os ${INCS} ${CPPFLAGS}
 LDFLAGS  = ${LIBS}
 
 # Solaris

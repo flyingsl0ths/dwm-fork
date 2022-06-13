@@ -1,17 +1,21 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 0; /* border pixel of windows */
-static const unsigned int snap = 32;    /* snap pixel */
-static const unsigned int gappih = 20;  /* horiz inner gap between windows */
-static const unsigned int gappiv = 10;  /* vert inner gap between windows */
+static const unsigned int corner_radius = 5; /* border pixel of windows */
+static const unsigned int borderpx = 0;       /* border pixel of windows */
+static const unsigned int snap = 32;          /* snap pixel */
+static const unsigned int gappih = 20; /* horiz inner gap between windows */
+static const unsigned int gappiv = 10; /* vert inner gap between windows */
 static const unsigned int gappoh =
     10; /* horiz outer gap between windows and screen edge */
+
 static const unsigned int gappov =
     30; /* vert outer gap between windows and screen edge */
+
 static const int smartgaps_fact =
     0; /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer
           gaps */
+
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar = 1;  /* 0 means bottom bar */
 static const int focusonwheel = 0;
@@ -19,8 +23,10 @@ static const int focusonwheel = 0;
 /* Status is to be shown on: -1 (all monitors), 0 (a specific monitor by index),
  * 'A' (active monitor) */
 static const int statusmon = 'A';
-static const unsigned int systrayspacing = 1; /* systray spacing */
-static const int showsystray = 1;             /* 0 means no systray */
+
+static const unsigned int systrayspacing = 0; /* systray spacing */
+
+static const int showsystray = 1; /* 0 means no systray */
 
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype = INDICATOR_BOTTOM_BAR;
@@ -42,9 +48,9 @@ static char normbordercolor[] = "#6E6C7E";
 static char normfloatcolor[] = "#B48EAD";
 
 static char selfgcolor[] = "#302D41";
-static char selbgcolor[] = "#89DCEB";
-static char selbordercolor[] = "#89DCEB";
-static char selfloatcolor[] = "#89DCEB";
+static char selbgcolor[] = "#96CDFB";
+static char selbordercolor[] = "#96CDFB";
+static char selfloatcolor[] = "#96CDFB";
 
 static char titlenormfgcolor[] = "#D9E0EE";
 static char titlenormbgcolor[] = "#302D41";
@@ -52,9 +58,9 @@ static char titlenormbordercolor[] = "#6E6C7E";
 static char titlenormfloatcolor[] = "#B48EAD";
 
 static char titleselfgcolor[] = "#303D41";
-static char titleselbgcolor[] = "#89DCEB";
-static char titleselbordercolor[] = "#89DCEB";
-static char titleselfloatcolor[] = "#89DCEB";
+static char titleselbgcolor[] = "#96CDFB";
+static char titleselbordercolor[] = "#96CDFB";
+static char titleselfloatcolor[] = "#96CDFB";
 
 static char tagsnormfgcolor[] = "#D9E0EE";
 static char tagsnormbgcolor[] = "#302D41";
@@ -62,12 +68,12 @@ static char tagsnormbordercolor[] = "#6E6C7E";
 static char tagsnormfloatcolor[] = "#B48EAD";
 
 static char tagsselfgcolor[] = "#302D41";
-static char tagsselbgcolor[] = "#89DCEB";
-static char tagsselbordercolor[] = "#89DCEB";
-static char tagsselfloatcolor[] = "#89DCEB";
+static char tagsselbgcolor[] = "#96CDFB";
+static char tagsselbordercolor[] = "#96CDFB";
+static char tagsselfloatcolor[] = "#96CDFB";
 
-static char hidnormfgcolor[] = "#89DCEB";
-static char hidselfgcolor[] = "#96CDFB";
+static char hidnormfgcolor[] = "#96CDFB";
+static char hidselfgcolor[] = "#89DCEB";
 static char hidnormbgcolor[] = "#302D41";
 static char hidselbgcolor[] = "#302D41";
 
@@ -95,7 +101,10 @@ static char *colors[][ColCount] = {
 };
 
 static const char *const autostart[] = {
-    "/usr/bin/xfce4-notifyd-start",
+    "/usr/bin/dunst",
+    "&",
+    NULL,
+    "/usr/lib/xfce-polkit/xfce-polkit",
     "&",
     NULL,
     "xinput",
@@ -105,18 +114,19 @@ static const char *const autostart[] = {
     "1",
     NULL,
     "gammy",
+    NULL,
+    "picom",
+    "-b",
+    "--animations",
+    "--animation-window-mass",
+    "0.5",
+    "--animation-for-open-window",
+    "zoom",
+    "--animation-stiffness",
+    "350",
+    NULL,
+    "xsettingsd",
     "&",
-    NULL,
-    "/usr/lib/xfce-polkit/xfce-polkit",
-    "&",
-    NULL,
-    "/bin/sh",
-    "-c",
-    "(nohup picom &)",
-    NULL,
-    "/bin/sh",
-    "-c",
-    "xsettingsd &",
     NULL,
     "/home/flyingsloths/.dwm/status_bar.sh",
     "&",
@@ -138,17 +148,17 @@ static const char *const autostart[] = {
     NULL /* terminate */
 };
 
-const char *spcmd1[] = {"kitty", "--class='terminalscratchpad'", NULL};
-const char *spcmd2[] = {
-    "kitty", "--class='fmscratchpad'", "zsh", "-i", "-c", "ranger", NULL};
-const char *spcmd3[] = {
-    "kitty", "--class='ytmusicscratchpad'", "ytfzf", "-m", "-t", "-l", NULL};
-const char *spcmd4[] = {"kitty", "--class='pyscratchpad'",
+const char *spcmd1[] = {"st", "-c", "scratchpad", NULL};
+const char *spcmd2[] = {"st", "-c", "fmscratchpad", "zsh",
+                        "-i", "-c", "ranger",       NULL};
+const char *spcmd3[] = {"st", "-c", "ytmusicscratchpad", "ytfzf", "-m", "-t",
+                        "-l", NULL};
+const char *spcmd4[] = {"st", "-c", "pyscratchpad",
                         "/home/flyingsloths/.local/bin/bpython", NULL};
 
 static Sp scratchpads[] = {
     /* name          cmd  */
-    {"terminalscratchpad", spcmd1},
+    {"scratchpad", spcmd1},
     {"fmscratchpad", spcmd2},
     {"ytmusicscratchpad", spcmd3},
     {"pyscratchpad", spcmd4}};
@@ -186,10 +196,9 @@ static Sp scratchpads[] = {
  * patches.
  */
 static char *tagicons[][NUMTAGS] = {
-    [DEFAULT_TAGS] = {" ", " ", " ", " ", " ", " ", " ", " ", " "},
-    [ALTERNATIVE_TAGS] = {"A", "B", "C", "D", "E", "F", "G", "H", "I"},
-    [ALT_TAGS_DECORATION] = {"<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>",
-                             "<8>", "<9>"},
+    [DEFAULT_TAGS] = {"一", "二", "三", "四", "五"},
+    [ALTERNATIVE_TAGS] = {"A", "B", "C", "D", "E"},
+    [ALT_TAGS_DECORATION] = {"<1>", "<2>", "<3>", "<4>", "<5>"},
 };
 
 /* There are two options when it comes to per-client rules:
@@ -220,20 +229,20 @@ static const Rule rules[] = {
     RULE(.wintype = WTYPE "DIALOG", .isfloating = 1,
          .iscentered = 1) RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
         RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
-            RULE(.wintype = WTYPE "SPLASH", .isfloating = 1,
-                 .iscentered = 1) RULE(.class = "Gimp", .isfloating = 1)
-                RULE(.class = "jetbrains-studio", .isfloating = 1)
-                    RULE(.class = "gammy", .isfloating = 1, .iscentered = 1)
-                        RULE(.instance = "terminalscratchpad", .tags = SPTAG(0),
-                             .isfloating = 1, .iscentered = 1)
-                            RULE(.instance = "fmscratchpad", .tags = SPTAG(1),
+            RULE(.wintype = WTYPE "SPLASH", .isfloating = 1, .iscentered = 1)
+                RULE(.class = "Gimp", .isfloating = 1)
+                    RULE(.class = "jetbrains-studio", .isfloating = 1)
+                        RULE(.class = "gammy", .isfloating = 1, .iscentered = 1)
+                            RULE(.class = "scratchpad", .tags = SPTAG(0),
                                  .isfloating = 1, .iscentered = 1)
-                                RULE(.instance = "ytmusicscratchpad",
-                                     .tags = SPTAG(2), .isfloating = 1,
-                                     .iscentered = 1)
-                                    RULE(.instance = "pyscratchpad",
-                                         .tags = SPTAG(3), .isfloating = 1,
-                                         .iscentered = 1)};
+                                RULE(.class = "fmscratchpad", .tags = SPTAG(1),
+                                     .isfloating = 1, .iscentered = 1)
+                                    RULE(.class = "ytmusicscratchpad",
+                                         .tags = SPTAG(2), .isfloating = 1,
+                                         .iscentered = 1)
+                                        RULE(.class = "pyscratchpad",
+                                             .tags = SPTAG(3), .isfloating = 1,
+                                             .iscentered = 1)};
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
  * introducing your own bar modules.
@@ -266,14 +275,16 @@ static const float mfact = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster = 1;    /* number of clients in master area */
 static const int resizehints =
     0; /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen =
+    1; /* 1 will force focus on the fullscreen window */
 static const int decorhints = 1; /* 1 means respect decoration hints */
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
     {"", tile}, /* first entry is default */
     {"", NULL}, /* no layout function means floating behavior */
-    {"", monocle}, {"", bstack}, {"", centeredmaster}, {"",
-    spiral},  {"", grid},
+    {"", monocle}, {"", bstack}, {"", centeredmaster},
+    {"", spiral},  {"", grid},
 };
 
 /* key definitions */
@@ -317,7 +328,7 @@ static const char *dmenucmd[] = {"dmenu_run",
                                  selfgcolor,
                                  topbar ? NULL : "-b",
                                  NULL};
-static const char *termcmd[] = {"kitty", NULL};
+static const char *termcmd[] = {"st", NULL};
 
 static Key keys[] = {
     /* modifier                     key            function argument */

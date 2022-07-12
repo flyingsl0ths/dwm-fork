@@ -2,8 +2,8 @@
 
 /* appearance */
 static const unsigned int corner_radius = 5; /* border pixel of windows */
-static const unsigned int borderpx = 0;       /* border pixel of windows */
-static const unsigned int snap = 32;          /* snap pixel */
+static const unsigned int borderpx = 0;      /* border pixel of windows */
+static const unsigned int snap = 32;         /* snap pixel */
 static const unsigned int gappih = 20; /* horiz inner gap between windows */
 static const unsigned int gappiv = 10; /* vert inner gap between windows */
 static const unsigned int gappoh =
@@ -101,17 +101,8 @@ static char *colors[][ColCount] = {
 };
 
 static const char *const autostart[] = {
-    "/usr/bin/dunst",
+    "dunst",
     "&",
-    NULL,
-    "/usr/lib/xfce-polkit/xfce-polkit",
-    "&",
-    NULL,
-    "xinput",
-    "set-prop",
-    "12",
-    "311",
-    "1",
     NULL,
     "gammy",
     NULL,
@@ -131,9 +122,10 @@ static const char *const autostart[] = {
     "/home/flyingsloths/.dwm/status_bar.sh",
     "&",
     NULL,
-    "/bin/sh",
+    "env",
+    "bash",
     "-c",
-    "/usr/bin/xautolock -time 10 -locker "
+    "xautolock -time 10 -locker "
     "/home/flyingsloths/.local/bin/i3lock_color -detectsleep &",
     NULL,
     "xwallpaper",
@@ -142,7 +134,7 @@ static const char *const autostart[] = {
     "--stretch",
     "/home/flyingsloths/.local/share/wallpaper/wallpaper",
     NULL,
-    "/usr/bin/xrdb",
+    "xrdb",
     "/home/flyingsloths/Xresources",
     NULL,
     NULL /* terminate */
@@ -153,8 +145,7 @@ const char *spcmd2[] = {"st", "-c", "fmscratchpad", "zsh",
                         "-i", "-c", "ranger",       NULL};
 const char *spcmd3[] = {"st", "-c", "ytmusicscratchpad", "ytfzf", "-m", "-t",
                         "-l", NULL};
-const char *spcmd4[] = {"st", "-c", "pyscratchpad",
-                        "/home/flyingsloths/.local/bin/bpython", NULL};
+const char *spcmd4[] = {"st", "-c", "pyscratchpad", "bpython", NULL};
 
 static Sp scratchpads[] = {
     /* name          cmd  */
@@ -298,7 +289,7 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd)                                                             \
   {                                                                            \
-    .v = (const char *[]) { "/bin/sh", "-c", cmd, NULL }                       \
+    .v = (const char *[]) { "env", "bash", "-c", cmd, NULL }                   \
   }
 
 /* helper for spawning no argument commands in the pre dwm-5.0 fashion */
@@ -338,7 +329,7 @@ static Key keys[] = {
     {MODKEY, XK_z, spawn, SCMD("zathura")},
     {MODKEY, XK_u, spawn, SCMD("corectrl")},
     {MODKEY, XK_v, spawn, SCMD("vscodium")},
-    {MODKEY | ShiftMask, XK_y, spawn, SCMD("/usr/bin/gammy")},
+    {MODKEY | ShiftMask, XK_y, spawn, SCMD("gammy")},
 
     {MODKEY, XK_e, spawn,
      SCMD("/home/flyingsloths/.config/rofi/applets/android/editors.sh")},

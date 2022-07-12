@@ -18,7 +18,6 @@
 #include "focusdir.c"
 #include "moveresize.c"
 #include "movestack.c"
-#include "roundedcorners.c"
 #include "scratchpad.c"
 #include "selfrestart.c"
 #include "tagall.c"

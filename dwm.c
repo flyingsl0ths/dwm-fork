@@ -544,9 +544,6 @@ arrangemon(Monitor *m)
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
-	Client *c;
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		drawroundedcorners(c);
 }
 
 void
@@ -1566,7 +1563,6 @@ movemouse(const Arg *arg)
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				resize(c, nx, ny, c->w, c->h, 1);
 			}
-			drawroundedcorners(c);
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -1580,7 +1576,6 @@ movemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
-	drawroundedcorners(c);
 	ignoreconfigurerequests = 0;
 }
 
@@ -1743,7 +1738,6 @@ resizemouse(const Arg *arg)
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				resize(c, c->x, c->y, nw, nh, 1);
-				drawroundedcorners(c);
 			}
 			break;
 		}

@@ -299,10 +299,9 @@ static const Layout layouts[] = {
   }
 
 /* commands */
-static char dmenumon[2] =
-    "0"; /* component of dmenucmd, manipulated in spawn() */
+static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+
 static const char *dmenucmd[] = {"dmenu_run",
-                                 "-i",
                                  "-p",
                                  "λ",
                                  "-m",
@@ -319,6 +318,7 @@ static const char *dmenucmd[] = {"dmenu_run",
                                  selfgcolor,
                                  topbar ? NULL : "-b",
                                  NULL};
+
 static const char *termcmd[] = {"st", NULL};
 
 static Key keys[] = {

@@ -137,6 +137,9 @@ static const char *const autostart[] = {
     "merge",
     "/home/flyingsloths/Xresources",
     NULL,
+    "lxqt-policykit-agent",
+    "&",
+    NULL,
     NULL /* terminate */
 };
 

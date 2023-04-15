@@ -100,52 +100,53 @@ static char *colors[][ColCount] = {
     [SchemeUrg] = {urgfgcolor, urgbgcolor, urgbordercolor, urgfloatcolor},
 };
 
+#define HOME "/home/flyingsl0ths/"
+
 static const char *const autostart[] = {
     "dunst",
     "&",
     NULL,
-    "redshift",
-    "-PO",
-    "2500K",
-    NULL,
     "picom",
     "-b",
-    "--animations",
-    "--animation-window-mass",
-    "0.5",
-    "--animation-for-open-window",
-    "zoom",
-    "--animation-stiffness",
-    "350",
     NULL,
-    "/home/flyingsloths/.dwm/status_bar.sh",
+    HOME ".dwm/status_bar.sh",
     "&",
     NULL,
     "env",
     "bash",
     "-c",
-    "xautolock -time 10 -locker "
-    "/home/flyingsloths/.local/bin/i3lock_color -detectsleep &",
+    "xautolock -time 10 -locker " HOME ".local/bin/i3lock_color -detectsleep &",
     NULL,
     "xwallpaper",
     "--output",
-    "eDP",
+    "HDMI-A-0",
     "--stretch",
-    "/home/flyingsloths/.local/share/wallpaper/wallpaper",
+    HOME ".local/share/wallpaper/wallpaper",
+    NULL,
+    "xrandr",
+    "-s",
+    "1920x1080",
+    "-r",
+    "144",
     NULL,
     "xrdb",
     "merge",
-    "/home/flyingsloths/Xresources",
+    HOME "Xresources",
+    NULL,
+    "lxqt-policykit-agent",
+    "&",
     NULL,
     NULL /* terminate */
 };
 
-const char *spcmd1[] = {"st", "-c", "scratchpad", NULL};
-const char *spcmd2[] = {"st", "-c", "fmscratchpad", "zsh",
-                        "-i", "-c", "ranger",       NULL};
-const char *spcmd3[] = {"st", "-c", "ytmusicscratchpad", "ytfzf", "-m", "-t",
-                        "-l", NULL};
-const char *spcmd4[] = {"st", "-c", "pyscratchpad", "bpython", NULL};
+const char *spcmd1[] = {"alacritty", "--class", "scratchpad", NULL};
+const char *spcmd2[] = {"alacritty", "--class", "fmscratchpad", "-e", "zsh",
+                        "-i",        "--class", "ranger",       NULL};
+const char *spcmd3[] = {"alacritty", "--class", "ytmusicscratchpad",
+                        "-e",        "ytfzf",   "-m",
+                        "-t",        "-l",      NULL};
+const char *spcmd4[] = {"alacritty", "--class", "pyscratchpad",
+                        "-e",        "bpython", NULL};
 
 static Sp scratchpads[] = {
     /* name          cmd  */
@@ -299,27 +300,17 @@ static const Layout layouts[] = {
   }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static char dmenumon[2] =
+    "0"; /* component of dmenucmd, manipulated in spawn() */
 
-static const char *dmenucmd[] = {"dmenu_run",
-                                 "-p",
-                                 "λ",
-                                 "-m",
-                                 dmenumon,
-                                 "-fn",
-                                 dmenufont,
-                                 "-nb",
-                                 normbgcolor,
-                                 "-nf",
-                                 normfgcolor,
-                                 "-sb",
-                                 selbgcolor,
-                                 "-sf",
-                                 selfgcolor,
-                                 topbar ? NULL : "-b",
-                                 NULL};
+static const char *dmenucmd[] = {
+    "dmenu_run", "-p",  "λ",         "-m",
+    dmenumon,    "-fn", dmenufont,   "-nb",
+    normbgcolor, "-nf", normfgcolor, "-sb",
+    selbgcolor,  "-sf", selfgcolor,  topbar ? NULL : "-b",
+    NULL};
 
-static const char *termcmd[] = {"st", NULL};
+static const char *termcmd[] = {"alacritty", NULL};
 
 static Key keys[] = {
     /* modifier                     key            function argument */
@@ -331,20 +322,18 @@ static Key keys[] = {
     {MODKEY, XK_v, spawn, SCMD("vscodium")},
     {MODKEY | ShiftMask, XK_y, spawn, SCMD("gammy")},
 
-    {MODKEY, XK_e, spawn,
-     SCMD("/home/flyingsloths/.config/rofi/applets/android/editors.sh")},
+    {MODKEY, XK_e, spawn, SCMD(HOME ".config/rofi/applets/android/editors.sh")},
 
     {MODKEY,
      XK_a,
      spawn,
-     {.v = (const char *[]){"/home/flyingsloths/.local/bin/game_mode",
-                            "android-studio", NULL}}},
+     {.v = (const char *[]){HOME ".local/bin/game_mode", "android-studio",
+                            NULL}}},
 
     {MODKEY,
      XK_y,
      spawn,
-     {.v = (const char *[]){"/home/flyingsloths/.local/bin/game_mode", "yuzu",
-                            NULL}}},
+     {.v = (const char *[]){HOME ".local/bin/game_mode", "yuzu", NULL}}},
 
     {MODKEY, XK_F6, spawn, {.v = (const char *[]){"pamixer", "-t", NULL}}},
     {MODKEY, XK_F7, spawn, {.v = (const char *[]){"pamixer", "-d", "5", NULL}}},
@@ -363,23 +352,19 @@ static Key keys[] = {
     {MODKEY | ShiftMask,
      XK_p,
      spawn,
-     {.v =
-          (const char *[]){
-              "/home/flyingsloths/.config/rofi/launchers/ribbon/launcher.sh",
-              "ribbon_bottom", NULL}}},
+     {.v = (const char *[]){HOME ".config/rofi/launchers/ribbon/launcher.sh",
+                            "ribbon_bottom", NULL}}},
 
     {MODKEY | ShiftMask,
      XK_o,
      spawn,
-     {.v =
-          (const char *[]){
-              "/home/flyingsloths/.config/rofi/launchers/ribbon/launcher.sh",
-              "full_bottom", NULL}}},
+     {.v = (const char *[]){HOME ".config/rofi/launchers/ribbon/launcher.sh",
+                            "full_bottom", NULL}}},
 
     {MODKEY | ShiftMask, XK_n, spawn, SCMD("networkmanager_dmenu")},
 
     {MODKEY | ShiftMask, XK_x, spawn,
-     SCMD("/home/flyingsloths/.config/rofi/applets/android/powermenu.sh")},
+     SCMD(HOME ".config/rofi/applets/android/powermenu.sh")},
 
     {MODKEY, XK_f, spawn, SCMD("pcmanfm")},
 

@@ -15,14 +15,14 @@ status_bar() {
 
   todays_date="[^c#E8A2AF^  ^c#D9E0EE^$(date +"%b %d, %Y %a %I:%M%p")]"
 
-  battery_level="[^c#B5E8E0^  ^c#D9E0EE^$(cat /sys/class/power_supply/BAT1/capacity)%]"
+  # battery_level="[^c#B5E8E0^  ^c#D9E0EE^$(cat /sys/class/power_supply/BAT1/capacity)%]"
 
   volume_level="[^c#C9CBFF^ ^c#D9E0EE^$(pamixer --get-volume-human)]"
 
   xsetroot -name "$wifi_connection $ram_usage $todays_date $battery_level $volume_level"
 }
 
-kill_existing
+# kill_existing
 
 while true; do
   status_bar
